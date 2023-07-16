@@ -12,7 +12,7 @@ public:
    AddressExtractor extractor;
 };
 
-MATCHER(IsEmpty, "") {
+MATCHER(isEmpty, "") {
    return 
       arg.road.empty() &&
       arg.city.empty() &&
@@ -23,7 +23,7 @@ MATCHER(IsEmpty, "") {
 TEST_F(AnAddressExtractor, ReturnsAnEmptyAddressOnAFailedParse) {
    auto address = extractor.addressFrom("not valid json");
 
-   ASSERT_THAT(address, IsEmpty());
+   ASSERT_THAT(address, isEmpty());
 }
 
 TEST_F(AnAddressExtractor, ReturnsAnEmptyAddressWhenNoAddressFound) {
@@ -31,7 +31,7 @@ TEST_F(AnAddressExtractor, ReturnsAnEmptyAddressWhenNoAddressFound) {
 
    auto address = extractor.addressFrom(json);
 
-   ASSERT_THAT(address, IsEmpty());
+   ASSERT_THAT(address, isEmpty());
 }
 
 TEST_F(AnAddressExtractor, ReturnsPopulatedAddressForValidJsonResult) {
