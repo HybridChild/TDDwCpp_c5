@@ -21,7 +21,14 @@ const string APlaceDescriptionService::ValidLongitude("-104.44");
 class HttpStub: public Http {
    void initialize() override {}
    std::string get(const std::string& url) const override {
-      return "???";
+      return R"({
+                  "address":{
+                     "road":"Drury Ln",
+                     "city":"Fountain",
+                     "state":"CO",
+                     "country":"US",
+                  }
+               })";
    }
 };
 // END:HttpStub
@@ -29,7 +36,7 @@ class HttpStub: public Http {
 // START:ReturnsDescriptionForValidLocation
 TEST_F(APlaceDescriptionService, ReturnsDescriptionForValidLocation) {
    HttpStub httpStub;
-   PlaceDescriptionService service(&httpStub);
+   PlaceDescriptionService service(&httpStub);  // inject HttpStub instance
 
    auto description = service.summaryDescription(ValidLatitude, ValidLongitude);
 
