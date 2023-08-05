@@ -21,7 +21,8 @@ string PlaceDescriptionService::summaryDescription(const string& latitude, const
 
 string PlaceDescriptionService::createGetRequestUrl( const string& latitude, const string& longitude) const
 {
-   return "lat=" + latitude + "&" + "lon=" + longitude;
+   string url = "http://open.mapquestapi.com/nominatim/v1/reverse?format=json&";
+   return url + "lat=" + latitude + "&" + "lon=" + longitude;
 }
 
 string PlaceDescriptionService::summaryDescription(const Address& address) const {
