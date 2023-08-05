@@ -18,9 +18,14 @@ const string APlaceDescriptionService::ValidLatitude("38.005");
 const string APlaceDescriptionService::ValidLongitude("-104.44");
 
 // START:HttpStub
-class HttpStub: public Http {
+class HttpStub: public Http
+{
    void initialize() override {}
-   std::string get(const std::string& url) const override {
+   
+   std::string get(const std::string& url) const override
+   {
+      verify(url);
+      
       return R"({
                   "address":{
                      "road":"Drury Ln",
@@ -29,6 +34,15 @@ class HttpStub: public Http {
                      "country":"US",
                   }
                })";
+   }
+
+   void verify(const string& url) const
+   {
+      auto expectedArgs(
+         "lat=" + APlaceDescriptionService::ValidLatitude + "&" +
+         "lon=" + APlaceDescriptionService::ValidLongitude);
+
+      ASSERT_THAT(url, EndsWith(expectedArgs));
    }
 };
 // END:HttpStub
