@@ -10,25 +10,17 @@ PlaceDescriptionService::PlaceDescriptionService(Http* http) : http_(http) {}
 
 string PlaceDescriptionService::summaryDescription(const string& latitude, const string& longitude) const
 {
-   auto requestUrl = createGetRequestUrl(latitude, longitude);
-   auto jsonResponse = get(requestUrl);
-   return summaryDescription(jsonResponse);
-}
-
-string PlaceDescriptionService::createGetRequestUrl( const string& latitude, const string& longitude) const
-{
    string server{"http://open.mapquestapi.com/"};
    string document{"nominatim/v1/reverse"};
 
-   return server + document + "?" +
+   string url = server + document + "?" +
       keyValue("format", "json") + "&" +
       keyValue("lat", latitude) + "&" +
       keyValue("lon", longitude);
-}
+   
+   auto jsonResponse = http_->get(url);
 
-string PlaceDescriptionService::get(const string& requestUrl) const
-{
-   return http_->get(requestUrl);
+   return summaryDescription(jsonResponse);
 }
 
 string PlaceDescriptionService::summaryDescription(const string& jsonResponse) const
