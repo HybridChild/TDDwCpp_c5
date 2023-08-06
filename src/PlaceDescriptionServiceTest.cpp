@@ -20,30 +20,20 @@ const string APlaceDescriptionService::ValidLongitude("-104.44");
 // START:HttpStub
 class HttpStub: public Http
 {
+public:
+   string returnResponse;
+   string expectedURL;
    void initialize() override {}
    
    std::string get(const std::string& url) const override
    {
       verify(url);
-
-      return R"({
-                  "address":{
-                     "road":"Drury Ln",
-                     "city":"Fountain",
-                     "state":"CO",
-                     "country":"US",
-                  }
-               })";
+      return returnResponse;
    }
 
    void verify(const string& url) const
    {
-      string urlStart("http://open.mapquestapi.com/nominatim/v1/reverse?format=json&");
-      string expected(urlStart +
-         "lat=" + APlaceDescriptionService::ValidLatitude + "&" +
-         "lon=" + APlaceDescriptionService::ValidLongitude);
-
-      ASSERT_THAT(url, Eq(expected));
+      ASSERT_THAT(url, Eq(expectedURL));
    }
 };
 // END:HttpStub
@@ -51,6 +41,20 @@ class HttpStub: public Http
 // START:ReturnsDescriptionForValidLocation
 TEST_F(APlaceDescriptionService, ReturnsDescriptionForValidLocation) {
    HttpStub httpStub;
+   httpStub.returnResponse = R"( {  "address": {
+                                       "road":"Drury Ln",
+                                       "city":"Fountain",
+                                       "state":"CO",
+                                       "country":"US",
+                                    }
+                                 })";
+
+   string urlStart("http://open.mapquestapi.com/nominatim/v1/reverse?format=json&");
+   httpStub.expectedURL =
+      urlStart +
+      "lat=" + APlaceDescriptionService::ValidLatitude + "&" +
+      "lon=" + APlaceDescriptionService::ValidLongitude;
+                                 
    PlaceDescriptionService service(&httpStub);  // inject HttpStub instance
 
    auto description = service.summaryDescription(ValidLatitude, ValidLongitude);
