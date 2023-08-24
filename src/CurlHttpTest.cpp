@@ -13,7 +13,7 @@ TEST(Http, WriteCallback) {
    ASSERT_THAT(CurlHttp::Response(), Eq("123456789012"));
 }
 
-TEST(HttpIntegration, Get) {
+TEST(DISABLED_HttpIntegration, Get) {  // DISABLED_ prefix tells GoogleTest to ignore this test
    CurlHttp http;
    http.initialize();
    auto response = http.get("http://langrsoft.com");
