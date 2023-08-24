@@ -28,6 +28,7 @@ public:
 
 TEST_F(APlaceDescriptionService, MakesHttpRequestToObtainAddress)
 {
+   InSequence forceExpectationOrder;               // tell GoogleMock to expect the calls in the order they are declared
    HttpStub httpStub;
    
    string urlStart("http://open.mapquestapi.com/nominatim/v1/reverse?format=json&");
