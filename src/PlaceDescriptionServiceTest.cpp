@@ -36,7 +36,8 @@ TEST_F(APlaceDescriptionService, MakesHttpRequestToObtainAddress)
       "lat=" + APlaceDescriptionService::ValidLatitude + "&" +
       "lon=" + APlaceDescriptionService::ValidLongitude;
    
-   EXPECT_CALL(httpStub, get(expectedURL));
+   EXPECT_CALL(httpStub, initialize());            // tell GoogleMock to expect a call to initialize()
+   EXPECT_CALL(httpStub, get(expectedURL));        // tell GoogleMock to expect a call to get() with the expectedURL
    PlaceDescriptionService service{&httpStub};
    service.summaryDescription(ValidLatitude, ValidLongitude);
 
@@ -45,7 +46,7 @@ TEST_F(APlaceDescriptionService, MakesHttpRequestToObtainAddress)
 
 TEST_F(APlaceDescriptionService, FormatsRetrievedAddressIntoSummaryDescription)
 {
-   HttpStub httpStub;
+   NiceMock<HttpStub> httpStub;     // NiceMock allows us to ignore calls to functions we don't care about
    EXPECT_CALL(httpStub, get(_))    // the _ wildcard allows GoogleMock to match on any call to the function regardless of the argument
       .WillOnce(Return(             // tell GoogleMock what to return from a call to get()
          R"({ "address": {

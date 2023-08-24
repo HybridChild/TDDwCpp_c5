@@ -18,6 +18,7 @@ string PlaceDescriptionService::summaryDescription(const string& latitude, const
       keyValue("lat", latitude) + "&" +
       keyValue("lon", longitude);
    
+   http_->initialize();
    auto jsonResponse = http_->get(url);
 
    return summaryDescription(jsonResponse);
